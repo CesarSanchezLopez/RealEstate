@@ -28,8 +28,7 @@ Permite gestionar propiedades inmobiliarias con sus imágenes, precios y trazabi
  
 ### 1. Clona el repositorio
 
-	git clone https://github.com/TU_USUARIO/ManageVM.git
-	cd ManageVM
+	git clone https://github.com/CesarSanchezLopez/RealEstate.git
 
 ### 2.  Configura la base de datos
 
