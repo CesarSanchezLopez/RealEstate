@@ -53,11 +53,11 @@ namespace RealEstate.Infrastructure
             modelBuilder.Entity<PropertyImage>(entity =>
             {
                 entity.HasKey(pi => pi.IdPropertyImage);
+
                 entity.Property(pi => pi.File)
                       .IsRequired()
-                      .HasMaxLength(500);
+                      .HasColumnType("varbinary(max)");  // ahora binario
 
-                // Relación Property -> PropertyImage (1:N)
                 entity.HasOne(pi => pi.Property)
                       .WithMany(p => p.Images)
                       .HasForeignKey(pi => pi.IdProperty);

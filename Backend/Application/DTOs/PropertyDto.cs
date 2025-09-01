@@ -15,5 +15,7 @@ namespace RealEstate.Application.DTOs
         public string CodeInternal { get; set; } = string.Empty;
         public int Year { get; set; }
         public int IdOwner { get; set; }
+        public string? Image { get; set; }
+        public List<PropertyTraceDto> Traces { get; set; } = new();
     }
 }

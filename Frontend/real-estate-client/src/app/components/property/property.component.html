@@ -1,0 +1,91 @@
+<div class="container mt-4">
+  <h2 class="mb-3">Crear Propiedad</h2>
+  <form (ngSubmit)="createProperty()" class="mb-4">
+    <div class="row g-3">
+      <div class="col-md-4">Nombre
+        <input [(ngModel)]="property.name" name="name" class="form-control" placeholder="Nombre" required>
+      </div>
+      <div class="col-md-4">Direccion
+        <input [(ngModel)]="property.address" name="address" class="form-control" placeholder="Dirección">
+      </div>
+      <div class="col-md-2">Precio
+        <input [(ngModel)]="property.price" name="price" type="number" class="form-control" placeholder="Precio">
+      </div>
+      <div class="col-md-2">Año
+        <input [(ngModel)]="property.year" name="year" type="number" class="form-control" placeholder="Año">
+      </div>
+      <div class="col-md-4">Cod Interno
+        <input [(ngModel)]="property.codeInternal" name="codeInternal" class="form-control" placeholder="Código Interno">
+      </div>
+      <div class="col-md-2">ID Owner
+        <input [(ngModel)]="property.idOwner" name="idOwner" type="number" class="form-control" placeholder="ID Owner">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Crear Propiedad</button>
+  </form>
+
+  <h2 class="mb-3">Lista de Propiedades</h2>
+  <button class="btn btn-info mb-3" (click)="listProperties()">Refrescar Lista</button>
+
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Dirección</th>
+      <th>Precio</th>
+      <th>Código Interno</th>
+      <th>Año</th>
+      <th>Owner ID</th>
+      <th>Imagen</th> <!-- 👈 nueva columna -->
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let p of properties">
+    <td>{{p.idProperty}}</td>
+    <td><input [(ngModel)]="p.name" class="form-control"></td>
+    <td><input [(ngModel)]="p.address" class="form-control"></td>
+    <td><input [(ngModel)]="p.price" type="number" class="form-control"></td>
+    <td><input [(ngModel)]="p.codeInternal" class="form-control"></td>
+    <td><input [(ngModel)]="p.year" type="number" class="form-control"></td>
+    <td><input [(ngModel)]="p.idOwner" type="number" class="form-control"></td>
+    <td>
+      <img *ngIf="p.image" [src]="'data:image/jpeg;base64,' + p.image" 
+           style="max-width:100px; max-height:100px;">
+    </td>
+    <td>
+      <input type="file" (change)="onFileSelected($event)" class="form-control mb-2">
+      <button class="btn btn-success btn-sm mb-1" (click)="uploadImage(p.idProperty ?? 0)">Subir Imagen</button>
+      <button class="btn btn-warning btn-sm" (click)="updateProperty(p)">Actualizar</button>
+      <button class="btn btn-info btn-sm" (click)="changePrice(p)">Cambiar Precio</button>
+      <button class="btn btn-info btn-sm" (click)="showTraces(p)">Ver Trazas</button>
+    </td>
+  </tr>
+</tbody>
+</table>
+
+<div *ngIf="traces.length > 0" class="mt-4">
+  <h3>Trazas de la propiedad </h3>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Nombre</th>
+        <th>Valor</th>
+        <th>Impuesto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of traces">
+        <td>{{t.idPropertyTrace}}</td>
+        <td>{{t.dateSale | date:'short'}}</td>
+        <td>{{t.name}}</td>
+        <td>{{t.value}}</td>
+        <td>{{t.tax}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>

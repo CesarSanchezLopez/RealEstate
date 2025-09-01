@@ -10,7 +10,7 @@ namespace RealEstate.Application.DTOs
     {
         public int IdPropertyImage { get; set; }
         public int IdProperty { get; set; }
-        public string File { get; set; } = string.Empty;
+        public byte[]  File { get; set; } 
         public bool Enabled { get; set; }
     }
 }

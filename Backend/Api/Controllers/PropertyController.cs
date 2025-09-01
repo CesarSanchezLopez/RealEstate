@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RealEstate.Application.DTOs;
 using RealEstate.Application.Interfaces;
+using RealEstate.Infrastructure.Repositories;
 
 namespace RealEstate.Api.Controllers
 {
@@ -30,9 +31,20 @@ namespace RealEstate.Api.Controllers
         // Add Image to Property
         // ========================
         [HttpPost("{propertyId}/images")]
-        public async Task<IActionResult> AddImage(int propertyId, [FromBody] PropertyImageDto dto)
+        public async Task<IActionResult> AddImage(int propertyId, IFormFile file)
         {
-            dto.IdProperty = propertyId;
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            using var ms = new MemoryStream();
+            await file.CopyToAsync(ms);
+
+            var dto = new PropertyImageDto
+            {
+                IdProperty = propertyId,
+                File = ms.ToArray()
+            };
+
             await _propertyService.AddImageAsync(dto);
             return Ok();
         }
@@ -41,10 +53,10 @@ namespace RealEstate.Api.Controllers
         // Change Price
         // ========================
         [HttpPatch("{propertyId}/price")]
-        public async Task<IActionResult> ChangePrice(int propertyId, [FromBody] decimal newPrice)
+        public async Task<IActionResult> ChangePrice(int propertyId, [FromBody] decimal newPrice, string changedBy)
         {
-            await _propertyService.ChangePriceAsync(propertyId, newPrice);
-            return NoContent();
+            await _propertyService.ChangePriceAsync(propertyId, newPrice,changedBy);
+            return Ok("Price updated and trace recorded.");
         }
 
         // ========================
@@ -77,10 +89,11 @@ namespace RealEstate.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var property = await _propertyService.GetFilteredAsync(null, null, null);
-            var single = property.FirstOrDefault(p => p.IdProperty == id);
-            if (single == null) return NotFound();
-            return Ok(single);
+            var property = await _propertyService.GetByIdAsync(id);
+          
+            return Ok(property);
         }
+
+       
     }
 }

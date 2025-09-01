@@ -24,7 +24,10 @@ namespace RealEstate.Infrastructure.Repositories
 
         public async Task<IEnumerable<Property>> GetFilteredAsync(string? name, decimal? minPrice, decimal? maxPrice)
         {
-            var query = _context.Properties.AsQueryable();
+            var query = _context.Properties
+                .Include(p => p.Images) // 👈 aquí incluimos las imágenes
+                .AsQueryable();
+
 
             if (!string.IsNullOrEmpty(name))
                 query = query.Where(p => p.Name.Contains(name));
@@ -47,6 +50,12 @@ namespace RealEstate.Infrastructure.Repositories
         public async Task UpdateAsync(Property property)
         {
             _context.Properties.Update(property);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddTraceAsync(PropertyTrace trace)
+        {
+            await _context.PropertyTraces.AddAsync(trace);
             await _context.SaveChangesAsync();
         }
     }
