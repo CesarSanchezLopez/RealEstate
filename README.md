@@ -47,6 +47,7 @@ Configura la cadena de conexión al archivo:
 cd Backend/
 
 dotnet ef migrations add InitialCreate -p Infrastructure/RealEstate.Infrastructure.csproj -s Api/RealEstate.Api.csproj
+
 dotnet ef database update -p Infrastructure/RealEstate.Infrastructure.csproj -s Api/RealEstate.Api.csproj
 
 
@@ -62,3 +63,8 @@ dotnet run --project Backend/Api/RealEstate.Api
 - Angular CLI:
   npm install -g @angular/cli
   
+  Cambiar  /src/environments
+     export const environment = {
+		production: false,
+		apiUrl: 'https://localhost:7115/api'
+	  };
